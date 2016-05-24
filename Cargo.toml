@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["Lukas Nemec <lu.nemec@gmail.com>"]
 
 [dependencies]
+num-digitize = "0.1"
