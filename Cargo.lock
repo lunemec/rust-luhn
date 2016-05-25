@@ -2,7 +2,8 @@
 name = "creditcard"
 version = "0.1.0"
 dependencies = [
- "num-digitize 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num 0.1.32 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num-digitize 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -45,7 +46,7 @@ dependencies = [
 
 [[package]]
 name = "num-digitize"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "num 0.1.32 (registry+https://github.com/rust-lang/crates.io-index)",
