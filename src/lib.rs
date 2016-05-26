@@ -19,73 +19,67 @@ impl Validate for CreditCard {
     }
 }
 
-/// Given a vector containing individual digits of credit card number, return
-/// a vector containing only digits on even indexes.
-/// ```
-/// let card_number_digits: Vec<u8> = vec![1,2,3,4];
-/// println!("{:?}", even_digits(card_number_digits)));
-/// [2,4]
-/// ```
-fn even_digits(card_number_digits: &Vec<u8>) -> Vec<u8> {
-    let even_iter = card_number_digits.iter().enumerate().filter(|&x| x.0.is_odd());
-    let mut digits: Vec<u8> = Vec::new();
-    for x in even_iter {
-        digits.push(*x.1);
-    }
 
-    return digits;
-}
-
-fn two_times_each_and_sum(digits: &Vec<u8>) -> u64 {
-    let mut result: u64 = 0;
-    for num in digits {
-        let mut tmp_num: u64 = *num as u64;
-        tmp_num *= 2;
-        let multiplication_digits = digitize(tmp_num);
-        for multiplicated_digit in multiplication_digits {
-            result += multiplicated_digit as u64;
+/// TODO
+fn take_digits<F>(card_number_digits: &Vec<u8>, mut take_function: F) -> Vec<u8>
+    where F: FnMut(&usize) -> bool
+{
+    let mut result: Vec<u8> = Vec::new();
+    for item in card_number_digits.iter().enumerate() {
+        if take_function(&item.0) {
+            result.insert(0, *item.1);
         }
     }
-    return result;
+    result
 }
 
-fn sum_odd_digits(card_number_digits: &Vec<u8>) -> u64 {
+/// Since we can't properly use `.sum()` on `Iterator` because of the
+/// 'iter_arith': bounds recently changed (see issue #27739), we will sum manually.
+fn sum(vector: &Vec<u8>) -> u64 {
     let mut result: u64 = 0;
-    let num = card_number_digits.iter().enumerate().filter(|&x| x.0.is_odd());
-    for x in num {
-        let x = *x.1 as u64;
-        result += x;
+    for item in vector {
+        result += *item as u64;
     }
-    return result;
+    result
 }
 
-pub fn validate_card_number(card_number: u64) -> bool {
-    let vec = digitize(card_number);
 
-    let odd_sum = sum_odd_digits(&vec);
-    let even_sum = two_times_each_and_sum(&even_digits(&vec));
+/// TODO
+pub fn validate_card_number(card_number: u64) -> bool {
+    let vec = {
+        let mut vec = digitize(card_number);
+        vec.reverse();
+        vec
+    };
+
+    // Sum odd indexed digits. We pass `is_even()` function because we index from 0, not from 1.
+    let odd_sum: u64 = sum(&take_digits(&vec, Integer::is_even));
+    let even_sum: u64 = {
+        let mut even_sum: u64 = 0;
+        // Take even indexed digits (indexed from 0).
+        let even_digits = take_digits(&vec, Integer::is_odd);
+        // Multiply each even indexed number by 2.
+        for even_digit in even_digits.iter().map(|x| x * 2) {
+            // Convert each number to digits and sum them.
+            even_sum += sum(&digitize(even_digit));
+        }
+        even_sum
+    };
 
     let luhn = odd_sum + even_sum;
     return luhn % 10 == 0;
 }
 
 #[test]
-fn test_even_digits() {
-    let result: Vec<u8> = vec![2, 4, 6, 8, 0];
-    let card_number_digits: Vec<u8> = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-    assert!(even_digits(&card_number_digits) == result);
-}
-
-#[test]
-fn test_two_times_each_and_sum() {
-    let test_data: Vec<u8> = vec![2, 4, 6, 8, 0];
-    assert!(two_times_each_and_sum(&test_data) == 22);
-}
-
-#[test]
-fn test_validation() {
+fn test_ok_numbers() {
     assert!(validate_card_number(49927398716));
+    assert!(validate_card_number(1234567812345670));
+    assert!(validate_card_number(79927398713));
+}
+
+#[test]
+fn test_invalid_numbers() {
+    assert!(validate_card_number(4242424242424241) == false);
     assert!(validate_card_number(49927398717) == false);
     assert!(validate_card_number(1234567812345678) == false);
-    assert!(validate_card_number(1234567812345670) == false);
 }
