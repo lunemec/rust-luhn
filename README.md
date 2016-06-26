@@ -2,7 +2,7 @@
 ![Image of Travis CI build status]
 (https://travis-ci.org/lunemec/rust-luhn.svg?branch=master)
 ![Crates.io]
-(https://img.shields.io/crates/v/rust-luhn.svg)
+(https://img.shields.io/crates/v/luhn2.svg)
 
 Performs a Luhn algorithm check on given number, returns true/false.
 
