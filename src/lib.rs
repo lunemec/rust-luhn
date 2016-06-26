@@ -4,23 +4,11 @@ extern crate num_digitize;
 use num::*;
 use num_digitize::digitize;
 
-struct CreditCard {
-    number: u64,
-    csc: u16, // https://en.wikipedia.org/wiki/Card_security_code
-}
 
-trait Validate {
-    fn validate(&self) -> bool;
-}
-
-impl Validate for CreditCard {
-    fn validate(&self) -> bool {
-        return validate_card_number(self.number);
-    }
-}
-
-
-/// TODO
+/// Takes a borrow of vector containing digits of credit card `&Vec<u8>` and a function
+/// `take_function(&usize) -> bool`. This function is called for each item of digit vector and if
+/// `take_function(digit) == true`, then it is inserted onto index 0 of resulting vector.
+/// By this action, the resulting vector is reversed.
 fn take_digits<F>(card_number_digits: &Vec<u8>, mut take_function: F) -> Vec<u8>
     where F: FnMut(&usize) -> bool
 {
@@ -44,10 +32,23 @@ fn sum(vector: &Vec<u8>) -> u64 {
 }
 
 
-/// TODO
-pub fn validate_card_number(card_number: u64) -> bool {
+/// Luhn algorithm for credit card number validation (may be used for other purposes).
+///
+/// # Arguments
+///
+/// * `number` - number to validate.
+///
+/// # Example
+///
+/// ```
+/// use luhn::validate;
+///
+/// let number: u64 = 49927398716;
+/// assert!(validate(number));
+/// ```
+pub fn validate(number: u64) -> bool {
     let vec = {
-        let mut vec = digitize(card_number);
+        let mut vec = digitize(number);
         vec.reverse();
         vec
     };
@@ -71,15 +72,28 @@ pub fn validate_card_number(card_number: u64) -> bool {
 }
 
 #[test]
+fn test_sum() {
+    assert!(sum(&vec![1, 2, 3, 4]) == 10);
+    assert!(sum(&vec![]) == 0);
+}
+
+#[test]
+fn test_take_digits() {
+    let test_digits = vec![0, 1, 2, 3, 4, 5, 6];
+    assert!(take_digits(&test_digits, Integer::is_even) == vec![6, 4, 2, 0]);
+    assert!(take_digits(&test_digits, Integer::is_odd) == vec![5, 3, 1]);
+}
+
+#[test]
 fn test_ok_numbers() {
-    assert!(validate_card_number(49927398716));
-    assert!(validate_card_number(1234567812345670));
-    assert!(validate_card_number(79927398713));
+    assert!(validate(49927398716));
+    assert!(validate(1234567812345670));
+    assert!(validate(79927398713));
 }
 
 #[test]
 fn test_invalid_numbers() {
-    assert!(validate_card_number(4242424242424241) == false);
-    assert!(validate_card_number(49927398717) == false);
-    assert!(validate_card_number(1234567812345678) == false);
+    assert!(validate(4242424242424241) == false);
+    assert!(validate(49927398717) == false);
+    assert!(validate(1234567812345678) == false);
 }
