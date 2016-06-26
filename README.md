@@ -23,5 +23,6 @@ luhn2 = "0.1"
 and this to your crate root:
 
 ```rust
-extern crate luhn;
+extern crate luhn2;
+use luhn2::validate;
 ```
