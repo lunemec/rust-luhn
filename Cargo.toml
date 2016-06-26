@@ -1,6 +1,6 @@
 [package]
 name = "luhn2"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Lukas Nemec <lu.nemec@gmail.com>"]
 description = "Luhn algorithm check."
 homepage = "https://github.com/lunemec/rust-luhn"

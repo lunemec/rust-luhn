@@ -41,7 +41,7 @@ fn sum(vector: &Vec<u8>) -> u64 {
 /// # Example
 ///
 /// ```
-/// use luhn::validate;
+/// use luhn2::validate;
 ///
 /// let number: u64 = 49927398716;
 /// assert!(validate(number));
