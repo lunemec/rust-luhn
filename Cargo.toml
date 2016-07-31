@@ -1,6 +1,6 @@
 [package]
 name = "luhn2"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Lukas Nemec <lu.nemec@gmail.com>"]
 description = "Luhn algorithm check."
 homepage = "https://github.com/lunemec/rust-luhn"
@@ -11,4 +11,4 @@ license = "WTFPL"
 
 [dependencies]
 num = "0.1"
-num-digitize = "0.1"
+num-digitize = "0.3"

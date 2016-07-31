@@ -2,17 +2,17 @@ extern crate num;
 extern crate num_digitize;
 
 use num::*;
-use num_digitize::digitize;
+use num_digitize::ToDigits;
 
 
 /// Takes a borrow of vector containing digits of credit card `&Vec<u8>` and a function
 /// `take_function(&usize) -> bool`. This function is called for each item of digit vector and if
 /// `take_function(digit) == true`, then it is inserted onto index 0 of resulting vector.
 /// By this action, the resulting vector is reversed.
-fn take_digits<F>(card_number_digits: &Vec<u8>, mut take_function: F) -> Vec<u8>
+fn take_digits<F>(card_number_digits: &Vec<i8>, mut take_function: F) -> Vec<i8>
     where F: FnMut(&usize) -> bool
 {
-    let mut result: Vec<u8> = Vec::new();
+    let mut result: Vec<i8> = Vec::new();
     for item in card_number_digits.iter().enumerate() {
         if take_function(&item.0) {
             result.insert(0, *item.1);
@@ -23,7 +23,7 @@ fn take_digits<F>(card_number_digits: &Vec<u8>, mut take_function: F) -> Vec<u8>
 
 /// Since we can't properly use `.sum()` on `Iterator` because of the
 /// 'iter_arith': bounds recently changed (see issue #27739), we will sum manually.
-fn sum(vector: &Vec<u8>) -> u64 {
+fn sum(vector: &Vec<i8>) -> u64 {
     let mut result: u64 = 0;
     for item in vector {
         result += *item as u64;
@@ -48,7 +48,7 @@ fn sum(vector: &Vec<u8>) -> u64 {
 /// ```
 pub fn validate(number: u64) -> bool {
     let vec = {
-        let mut vec = digitize(number);
+        let mut vec = number.to_digits();
         vec.reverse();
         vec
     };
@@ -62,7 +62,7 @@ pub fn validate(number: u64) -> bool {
         // Multiply each even indexed number by 2.
         for even_digit in even_digits.iter().map(|x| x * 2) {
             // Convert each number to digits and sum them.
-            even_sum += sum(&digitize(even_digit));
+            even_sum += sum(&even_digit.to_digits());
         }
         even_sum
     };
