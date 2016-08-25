@@ -11,4 +11,4 @@ license = "WTFPL"
 
 [dependencies]
 num = "0.1"
-num-digitize = "0.3"
+num-digitize = "0.4"

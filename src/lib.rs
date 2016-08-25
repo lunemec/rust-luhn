@@ -71,6 +71,7 @@ pub fn validate(number: u64) -> bool {
     return luhn % 10 == 0;
 }
 
+
 #[test]
 fn test_sum() {
     assert!(sum(&vec![1, 2, 3, 4]) == 10);
@@ -84,16 +85,21 @@ fn test_take_digits() {
     assert!(take_digits(&test_digits, Integer::is_odd) == vec![5, 3, 1]);
 }
 
-#[test]
-fn test_ok_numbers() {
-    assert!(validate(49927398716));
-    assert!(validate(1234567812345670));
-    assert!(validate(79927398713));
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn test_invalid_numbers() {
-    assert!(validate(4242424242424241) == false);
-    assert!(validate(49927398717) == false);
-    assert!(validate(1234567812345678) == false);
+    #[test]
+    fn test_ok_numbers() {
+        assert!(validate(49927398716));
+        assert!(validate(1234567812345670));
+        assert!(validate(79927398713));
+    }
+
+    #[test]
+    fn test_invalid_numbers() {
+        assert!(validate(4242424242424241) == false);
+        assert!(validate(49927398717) == false);
+        assert!(validate(1234567812345678) == false);
+    }
 }
