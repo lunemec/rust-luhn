@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["validate","Luhn algorithm for credit card number validation (may be used for other purposes)."]]});
