@@ -1,8 +1,6 @@
 # rust-luhn2
-[![Image of Travis CI build status]
-(https://travis-ci.org/lunemec/rust-luhn.svg?branch=master)](https://travis-ci.org/lunemec/rust-luhn)
-[![Crates.io]
-(https://img.shields.io/crates/v/luhn2.svg)](https://crates.io/crates/luhn2)
+[![Image of Travis CI build status](https://travis-ci.org/lunemec/rust-luhn.svg?branch=master)](https://travis-ci.org/lunemec/rust-luhn)
+[![Crates.io](https://img.shields.io/crates/v/luhn2.svg)](https://crates.io/crates/luhn2)
 
 Performs a Luhn algorithm check on given number, returns true/false.
 
